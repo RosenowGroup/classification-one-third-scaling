@@ -1,31 +1,54 @@
-[![Paper](https://img.shields.io/badge/paper-arXiv%3AXXXX.YYYYY-B31B1B.svg)](https://arxiv.org/abs/XXXX.YYYYY)
-[![DOI](https://zenodo.org/badge/{github_repo_id}.svg)](https://zenodo.org/badge/latestdoi/{github_repo_id})
+[![Paper](https://img.shields.io/badge/paper-arXiv%3A2610._-B31B1B.svg)](https://arxiv.org/abs/2610._)
 
-# Paper Title
+# A Boundary-Layer Mechanism for One-Third Scaling in Online Softmax Classification
 
-Author 1, Author 2, Author 3
+Marcel Kühn, Yoon Thelge, Bernd Rosenow
 
-[arXiv:XXXX.YYYYY](https://arxiv.org/abs/XXXX.YYYYY)
+[arXiv:2610._](https://arxiv.org/abs/2610._)
 
 ### Abstract
-Abstract Here
-
-### Description
-This repository includes links, code, scripts, and data to generate the figures in a paper.
-
-### Requirements
-The data in this project was generated via ....   Everything included in the [data](https://github.com/DelMaestroGroup/papers-code-template/tree/main/data) directory was generated via:
-
-* [Dependency Name](https://dependencelink)
-
-### Support
-The creation of these materials was supported in part by ....
+Hard-label classification is usually trained with smooth surrogate losses such as softmax cross-entropy. We isolate a mechanism by which this mismatch between smooth surrogate and discrete labels produces power-law learning curves for a one-layer softmax student trained by online SGD on Gaussian inputs with argmax teacher labels. In the thermodynamic limit, the dynamics reduce to a growing student-teacher alignment and a residual student variance sustained by SGD noise. At late times, only shrinking layers of examples around teacher decision boundaries remain active. This yields an $\alpha^{-1/3}$ law in training time $\alpha$ not only for the test loss but also for the generalization error, one minus test accuracy. The error law is an online-noise effect. The loss law persists without gradient noise. Learning-rate annealing separates the two exponents, improving the error exponent from 1/3 toward 1/2 while slowing the loss. Simulations support the predictions. Correlated Gaussian inputs and whitened pretrained features change transients, not the late-time decay. Experiments with deep neural networks can show compatible error scaling. The mechanism is asymptotic and complementary to spectral explanations and data-statistics explanations of neural scaling laws.
 
 
-### Figures
+### Quick Start
 
-#### Figure 01: Figure Name
-<img src="https://github.com/RosenowGroup/paper-code-template/blob/main/figures/figure01.svg" width="400px">
+Run Jupyter from this directory and open **`example_use.ipynb`**. The notebook consolidates the i.i.d. and correlated Gaussian experiments, minibatch-size sweep, direct mechanism diagnostics, MNIST experiment, CIFAR-5M/ViT experiment, Pythia checkpoint analysis. Some Gaussian settings are reduced for illustration.
 
-This figure is released under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) and can be freely copied, redistributed and remixed.
+### Gaussian Experiments
 
+* **`util_iid_gaussian.py`** implements the i.i.d. Gaussian simulations, parameter sweeps, theory curves, and plots.
+* **`util_correlated_gaussian.py`** implements experiments with power-law-correlated Gaussian inputs.
+* **`util_batch_size.py`** compares the dynamics at several minibatch sizes.
+* **`util_mechanism.py`** produces the conditional-error and alignment-gradient diagnostics of the boundary-layer mechanism.
+
+These experiments write reusable NumPy caches and figures under **`data/`**, **`data_K_class/`**, **`figures/`**, and **`figure_K_class/`**.
+
+### Image Experiments
+
+* **`util_mnist.py`** downloads MNIST on first use, runs the fixed six-seed experiment, caches it as **`data/mnist_histories.npz`**, and saves the two manuscript plots under **`figures/`**.
+* **`cifar5m_vit_features.py`** extracts ViT-B/16 features from CIFAR-5M. Place the CIFAR-5M `.npz` shards in **`cifar5m_data/`** before running it.
+* **`train_cifar5m.py`** trains the teacher and student classifiers on those features.
+* **`plot_cifar5m.py`** generates the CIFAR-5M generalization-error figures.
+
+The complete CIFAR-5M command-line workflow used by the notebook is:
+
+```bash
+python cifar5m_vit_features.py
+python train_cifar5m.py --data_file cifar5m_vit_features.pt --lr 0.0003 --seeds 0 1 2 3 --num_examples 1800000 --test_split 0.01 --use_whitening --bs 1
+python plot_cifar5m.py
+```
+
+
+### Pythia Experiment
+
+* **`evaluate_pythia.py`** evaluates one Pythia model at the 13 checkpoint steps on a pinned FineWeb stream and writes a compact result to **`pythia/`**.
+* **`plot_pythia.py`** fits the top-1 error curves and saves the raw and baseline-removed manuscript figures.
+
+Generate all three model results before plotting:
+
+```bash
+python evaluate_pythia.py 410m
+python evaluate_pythia.py 2.8b
+python evaluate_pythia.py 12b
+python plot_pythia.py
+```
