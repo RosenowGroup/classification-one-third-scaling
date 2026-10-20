@@ -1,10 +1,10 @@
-[![Paper](https://img.shields.io/badge/paper-arXiv%3A2610._-B31B1B.svg)](https://arxiv.org/abs/2610._)
+[![Paper](https://img.shields.io/badge/paper-arXiv%3A2605.22341-B31B1B.svg)](https://arxiv.org/abs/2605.22341)
 
 # A Boundary-Layer Mechanism for One-Third Scaling in Online Softmax Classification
 
 Marcel Kühn, Yoon Thelge, Bernd Rosenow
 
-[arXiv:2610._](https://arxiv.org/abs/2610._)
+[arXiv:2605.22341](https://arxiv.org/abs/2605.22341)
 
 ### Abstract
 Hard-label classification is usually trained with smooth surrogate losses such as softmax cross-entropy. We isolate a mechanism by which this mismatch between smooth surrogate and discrete labels produces power-law learning curves for a one-layer softmax student trained by online SGD on Gaussian inputs with argmax teacher labels. In the thermodynamic limit, the dynamics reduce to a growing student-teacher alignment and a residual student variance sustained by SGD noise. At late times, only shrinking layers of examples around teacher decision boundaries remain active. This yields an $\alpha^{-1/3}$ law in training time $\alpha$ not only for the test loss but also for the generalization error, one minus test accuracy. The error law is an online-noise effect. The loss law persists without gradient noise. Learning-rate annealing separates the two exponents, improving the error exponent from 1/3 toward 1/2 while slowing the loss. Simulations support the predictions. Correlated Gaussian inputs and whitened pretrained features change transients, not the late-time decay. Experiments with deep neural networks can show compatible error scaling. The mechanism is asymptotic and complementary to spectral explanations and data-statistics explanations of neural scaling laws.
